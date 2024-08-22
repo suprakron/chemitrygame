@@ -74,5 +74,20 @@ router.get('/questions/level3', (req, res) => {
         });
     });
 });
+router.post('/submit-answers', (req, res) => {
+    const answers = req.body.answers;
+    let score = 0;
+
+  
+    answers.forEach((answer, index) => {
+        
+        if (answer === correctAnswers[index]) {
+            score += 10;
+        }
+    });
+
+   
+    res.json({ score });
+});
 
 module.exports = router;

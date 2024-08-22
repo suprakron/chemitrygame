@@ -1,15 +1,7 @@
 [
-    {
-      "question": "What is 2 + 2?",
-      "answer": "4"
-    },
-    {
-      "question": "What is the capital of France?",
-      "answer": "Paris"
-    },
-    {
-      "question": "What is H2O?",
-      "answer": "Water"
-    }
-  ]
-  
+  {
+    "question": "",
+    "image": "/img/q2.png",
+    "answer": "4"
+  } 
+]

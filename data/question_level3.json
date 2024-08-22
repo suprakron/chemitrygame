@@ -1,14 +1,14 @@
 [
     {
-        "question": "What is the atomic number of carbon?",
+        "question": "ดุลสมการของปฏิกิริยาเคมีที่กำหนดให้ต่อไปนี้ aCa(OH)2 (aq) + bH3PO4 (aq) cH2O (l) + dCa3(PO4)2 (s)",
         "answer": "6"
     },
     {
-        "question": "What is the primary component of the Earth's atmosphere?",
+        "question": "ดุลสมการของปฏิกิริยาเคมีที่กำหนดให้ต่อไปนี้ aAgNO3 (aq) + bH2SO4 (aq) cAg2SO4 + dHNO3 (aq)",
         "answer": "Nitrogen"
     },
     {
-        "question": "What is the chemical reaction when vinegar and baking soda mix?",
+        "question": "คาร์บอนไดออกไซด์ (CO2 ) 88 กรัม มีกี่โมล",
         "answer": "Carbon Dioxide gas is produced"
     }
 ]

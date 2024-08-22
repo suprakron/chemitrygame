@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const healthBar = document.getElementById('health');
     const clockElement = document.getElementById('clock');
     let playerScore = 0;
-    let currentLevel = 1; // ระบุ Level เริ่มต้นเป็น Level 1
+    let currentLevel = 1; // Start at Level 1
 
-    // ตรวจสอบ URL เพื่อกำหนด currentLevel
+    // Check the URL to set currentLevel
     if (window.location.pathname.includes('game_level2')) {
         currentLevel = 2;
     } else if (window.location.pathname.includes('game_level3')) {
@@ -19,24 +19,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (nameForm) {
         nameForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // ป้องกันการส่งฟอร์มตามปกติ
-            const playerName = document.getElementById('name').value; // เก็บชื่อที่กรอก
-            localStorage.setItem('playerName', playerName); // เก็บชื่อใน localStorage
-            if (playerNameElement) playerNameElement.innerText = playerName; // แสดงชื่อใน playerNameElement ถ้ามีอยู่
-            window.location.href = 'game'; // เปลี่ยนหน้าไปที่ game.html
+            e.preventDefault(); // Prevent default form submission
+            const playerName = document.getElementById('name').value; // Get the name input
+            localStorage.setItem('playerName', playerName); // Store the name
+            if (playerNameElement) playerNameElement.innerText = playerName; // Display the name
+            window.location.href = 'game'; // Redirect to game.html
         });
     } else {
-        // ดึงชื่อผู้เล่นจาก localStorage หากไม่ใช่ฟอร์ม
+        // Retrieve player's name from localStorage if not the form
         const storedPlayerName = localStorage.getItem('playerName');
         if (storedPlayerName && playerNameElement) {
-            playerNameElement.innerText = storedPlayerName; // แสดงชื่อผู้เล่น
+            playerNameElement.innerText = storedPlayerName; // Display player's name
         }
     }
 
-    // ซ่อนป๊อปอัพตั้งแต่แรก
+    // Hide popup initially
     let popup = createPopup();
 
-    // ฟังก์ชันสำหรับอัปเดตนาฬิกา
+    // Function to update the clock
     function updateClock() {
         if (clockElement) {
             const now = new Date();
@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // อัปเดตนาฬิกาทุกวินาที
+    // Update clock every second
     setInterval(updateClock, 1000);
-    updateClock(); // เรียกใช้งานครั้งแรก
+    updateClock(); // Initial call
 
     if (collectPointsButton) {
         collectPointsButton.addEventListener('click', async () => {
@@ -61,85 +61,141 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    async function submitAnswers(answers, level) {
+        const response = await fetch('/api/submit-answers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answers })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            let scoreKey = `scoreLevel${level}`;
+            playerScore += result.score; // Increment the playerScore
+            localStorage.setItem(scoreKey, result.score); // Store the score for the current level
+            localStorage.setItem('totalScore', playerScore); // Store the cumulative total score
+            if (playerScoreElement) playerScoreElement.innerText = playerScore; // Display the updated score
+        }
+    }
+
     function displayQuestions(questions) {
         if (questionsContainer) {
             questionsContainer.style.display = 'block';
             const form = document.getElementById('questionsForm');
             if (form) {
-                form.innerHTML = ''; // ล้างฟอร์มก่อน
-
+                form.innerHTML = ''; // Clear the form
+    
                 questions.forEach((q, index) => {
                     const questionElement = document.createElement('div');
-                    questionElement.classList.add('question-item'); 
-                    questionElement.innerHTML = `
-                        <label>${q.question}</label>
-                        <input type="text" name="answer${index}" required>
-                    `;
+                    questionElement.classList.add('question-item');
+    
+                    // Add question text
+                    questionElement.innerHTML = `<label>${q.question}</label>`;
+    
+                    // Add image if available
+                    if (q.image) {
+                        const imageElement = document.createElement('img');
+                        imageElement.src = q.image;
+                        imageElement.alt = `Question Image ${index + 1}`;
+                        imageElement.style.maxWidth = '300px'; // Adjust size as needed
+                        questionElement.appendChild(imageElement);
+                    }
+    
+                    // Create a container for inputs a, b, and c
+                    const inputContainer = document.createElement('div');
+                    inputContainer.classList.add('input-group');
+    
+                    // Add input fields for a, b, and c
+                    ['a', 'b', 'c'].forEach(label => {
+                        const inputItem = document.createElement('div');
+                        inputItem.classList.add('input-item');
+    
+                        inputItem.innerHTML = `
+                            <label for="answer${label}${index}">${label}</label>
+                            <input type="text" id="answer${label}${index}" name="answer${index}_${label}" class="styled-input" required>
+                        `;
+    
+                        inputContainer.appendChild(inputItem);
+                    });
+    
+                    // Create helper button
+                    const helperButton = document.createElement('button');
+                    helperButton.innerText = 'ตัวช่วย';
+                    helperButton.classList.add('helper-button');
+                    questionElement.appendChild(helperButton);
+    
+                    // Add event listener to helper button
+                    helperButton.addEventListener('click', () => {
+                        // Create dropdown
+                        const dropdown = document.createElement('div');
+                        dropdown.classList.add('dropdown');
+                        dropdown.innerHTML = `
+                            <p>ต้องการตัวช่วยไหม?</p>
+                            <button class="helper-option" data-value="1">A</button>
+                            <button class="helper-option" data-value="2">B</button>
+                            <button class="helper-option" data-value="3">C</button>
+                            <button class="close-dropdown">ปิด</button>
+                        `;
+                        questionElement.appendChild(dropdown);
+    
+                        // Add event listeners to helper options
+                        dropdown.querySelectorAll('.helper-option').forEach(option => {
+                            option.addEventListener('click', (e) => {
+                                const value = e.target.dataset.value;
+                                const inputField = document.getElementById(`answer${e.target.textContent.toLowerCase()}${index}`);
+                                inputField.value = value; // Set value based on the button clicked
+                                inputField.disabled = true; // Disable input field
+                                dropdown.remove(); // Remove dropdown after selection
+                            });
+                        });
+    
+                        // Close dropdown button
+                        dropdown.querySelector('.close-dropdown').addEventListener('click', () => {
+                            dropdown.remove(); // Remove dropdown when closed
+                        });
+                    });
+    
+                    questionElement.appendChild(inputContainer); // Append input container to the question element
+                    questionElement.appendChild(helperButton); // Append helper button to the question element
                     form.appendChild(questionElement);
                 });
-
+    
+                // Add submit button
                 const submitButton = document.createElement('button');
                 submitButton.innerText = 'Submit';
                 submitButton.type = 'submit';
-                submitButton.style.backgroundColor = '#4CAF50';
-                submitButton.style.color = 'white';
-                submitButton.style.border = 'none';
-                submitButton.style.padding = '10px 20px';
-                submitButton.style.borderRadius = '5px';
-                submitButton.style.cursor = 'pointer';
-                submitButton.style.transition = 'background-color 0.3s';
-                submitButton.className = 'submit-button'; // เพิ่มคลาสสำหรับปุ่ม
                 form.appendChild(submitButton);
-
-                submitButton.onmouseover = function () {
-                    submitButton.style.backgroundColor = '#45a049'; // เปลี่ยนสีเมื่อเลื่อนเมาส์
-                };
-                submitButton.onmouseout = function () {
-                    submitButton.style.backgroundColor = '#4CAF50'; // คืนค่าสีเดิม
-                };
-
+    
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
                     const formData = new FormData(form);
                     const answers = [];
-
+    
                     questions.forEach((q, index) => {
-                        answers.push(formData.get(`answer${index}`));
+                        answers.push(formData.get(`answer${index}_a`));
+                        answers.push(formData.get(`answer${index}_b`));
+                        answers.push(formData.get(`answer${index}_c`));
                     });
-
-                    // ซ่อนคำถาม
+    
                     questionsContainer.style.display = 'none';
-
-                    // ทำให้ healthBar เต็ม
-                    if (healthBar) {
-                        healthBar.style.width = '100%'; // ปรับความกว้างเป็น 100%
-                        healthBar.style.transition = 'width 2s'; // เพิ่มการเคลื่อนไหวให้เต็มหลอดภายใน 2 วินาที
-                    }
-
-                    // แสดง popup หลังจาก healthBar เต็ม
-                    setTimeout(() => {
-                        document.body.appendChild(popup); // เพิ่มป๊อปอัพลงใน DOM
-                        popup.classList.add('show'); 
-                        popup.classList.remove('hidden');
-                    }, 2000); // แสดง popup หลังจาก 2 วินาที
-
-                    const response = await fetch('/api/submit-answers', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ answers })
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        playerScore += result.score;
-                        if (playerScoreElement) playerScoreElement.innerText = playerScore;
+    
+                    await submitAnswers(answers, currentLevel); // Submit answers and update score
+    
+                    // Navigate to the next level or home page
+                    if (currentLevel < 3) { // If not at Level 3
+                        currentLevel++;
+                        window.location.href = `game_level${currentLevel}`; // Go to the next level
+                    } else {
+                        window.location.href = `/`; // Return to home page
                     }
                 });
             }
         }
     }
+    
+    
 
-    // ฟังก์ชันป๊อปอัพ
+    // Popup function
     function createPopup() {
         const popupDiv = document.createElement('div');
         popupDiv.id = 'popup';
@@ -150,19 +206,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <button id="closePopup">Close</button>
         `;
 
-        // เพิ่มการทำงานให้กับปุ่มปิด
+        // Close button functionality
         const closePopupButton = popupDiv.querySelector('#closePopup');
         closePopupButton.addEventListener('click', () => {
-            popupDiv.classList.add('hidden'); // ซ่อน popup เมื่อปิด
-            popupDiv.remove(); // ลบ popup ออกจาก DOM
+            popupDiv.classList.add('hidden'); // Hide popup when closed
+            popupDiv.remove(); // Remove from DOM
 
-            // เพิ่มฟังก์ชันเพื่อไปยัง Level ถัดไป
-            if (currentLevel < 3) { // หากยังไม่ถึง Level 3
+            // Navigate to the next level
+            if (currentLevel < 3) { // If not at Level 3
                 currentLevel++;
-                window.location.href = `game_level${currentLevel}`; // ไปยังหน้า Level ถัดไป
+                window.location.href = `game_level${currentLevel}`; // Go to next level
+            } else {
+                window.location.href = `/`; // Return to home page
+                displayScores()
             }
         });
 
         return popupDiv;
     }
+
+    // Retrieve the total score from localStorage for display
+    const totalScore = localStorage.getItem('totalScore') || 0;
+    playerScore = Number(totalScore); // Convert to number
+    playerScoreElement.innerText = playerScore; // Display the score
 });

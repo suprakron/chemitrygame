@@ -1,18 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start Game</title>
     <link rel="stylesheet" href="/style.css">
+    <style>
+        /* Add your previous styling here */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('/img/bg_index.webp');
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transform: rotateY(-15deg);
+            transition: transform 0.3s ease-in-out;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .container:hover {
+            transform: rotateY(0deg);
+        }
+
+        h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        label {
+            font-size: 1.5em;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+            max-width: 300px;
+            text-align: center;
+        }
+
+        input[type="text"]:focus {
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.5);
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            width: 80%;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
+        }
+
+        .scoreboard {
+            color: white;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        .scoreboard p {
+            margin: 5px 0;
+        }
+
+        @media screen and (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            label {
+                font-size: 1.2em;
+            }
+
+            input[type="text"] {
+                font-size: 1em;
+                width: 90%;
+            }
+
+            button[type="submit"] {
+                font-size: 1em;
+                padding: 12px;
+                width: 90%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Educational Card Game</h1>
-    <form id="nameForm">
-        <label for="name">Enter your name:</label>
-        <input type="text" id="name" name="name" required>
-        <button type="submit">Start Game</button>
-    </form>
-    <script src="/script.js"></script>
+    <div class="container">
+        <h1>Educational Card Game</h1>
+        <form id="nameForm">
+            <label for="name">Enter your name:</label>
+            <input type="text" id="name" name="name" required>
+            <button type="submit">Start Game</button>
+        </form>
+        <div id="playerInfo" class="info-container" style="display: none;"> <!-- Initially hidden -->
+            <h3 id="playerName">Player</h3>
+            <p>Level 1 Score: <span id="level1Score">0</span></p>
+            <p>Level 2 Score: <span id="level2Score">0</span></p>
+            <p>Level 3 Score: <span id="level3Score">0</span></p>
+        </div>
+
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const playerNameElement = document.getElementById('playerName');
+            const level1ScoreElement = document.getElementById('level1Score');
+            const level2ScoreElement = document.getElementById('level2Score');
+            const level3ScoreElement = document.getElementById('level3Score');
+            const playerInfoElement = document.getElementById('playerInfo');
+    
+            // Retrieve player's name from localStorage
+            const storedPlayerName = localStorage.getItem('playerName');
+            if (storedPlayerName && playerNameElement) {
+                playerNameElement.innerText = storedPlayerName; // Display player's name
+            }
+    
+            // Retrieve and display scores
+            displayScores();
+    
+            function displayScores() {
+                const level1Score = localStorage.getItem('scoreLevel1') || 0;
+                const level2Score = localStorage.getItem('scoreLevel2') || 0;
+                const level3Score = localStorage.getItem('scoreLevel3') || 0;
+    
+                // Update score display
+                level1ScoreElement.innerText = level1Score;
+                level2ScoreElement.innerText = level2Score;
+                level3ScoreElement.innerText = level3Score;
+    
+                // Show the score display only after completing Level 3
+                if (level3Score > 0) { 
+                    playerInfoElement.style.display = 'block'; // Show scores only after Level 3 is completed
+                }
+            }
+    
+            const nameForm = document.getElementById('nameForm');
+            const playerNameInput = document.getElementById('name'); // Get the input element
+    
+            if (nameForm && playerNameInput) {
+                nameForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const playerName = playerNameInput.value.trim();
+                    if (playerName) {
+                        localStorage.setItem('playerName', playerName); // Save the player's name
+                        window.location.href = '/game'; // Redirect to Level 1
+                    }
+                });
+            }
+        });
+    </script>
+    
+    
+
+
 </body>
+
 </html>
