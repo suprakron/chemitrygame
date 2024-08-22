@@ -1,0 +1,191 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-image: url('img/bg1.jpg');
+    background-size: cover;  
+    background-position: center;  
+    background-repeat: no-repeat;  
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#gameContainer {
+    position: relative;  
+    background: rgba(255, 255, 255, 0.8); /* พื้นหลังโปร่งใส */
+    backdrop-filter: blur(10px); /* เอฟเฟกต์เบลอพื้นหลัง */
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* เงาที่ชัดเจนขึ้น */
+    padding: 20px;
+    text-align: center;
+}
+
+
+.info-container {
+    position: absolute; /* จัดตำแหน่งอิสระ */
+    top: 20px; /* ระยะห่างจากด้านบน */
+    left: 20px; /* ระยะห่างจากด้านซ้าย */
+    background-color: rgba(255, 255, 255, 0.9); /* พื้นหลังโปร่งใส */
+    border-radius: 10px; /* มุมโค้งมน */
+    padding: 15px; /* ระยะห่างภายใน */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* เงา */
+    transition: transform 0.2s; /* การเคลื่อนไหวเมื่อเลื่อนเมาส์ */
+}
+
+.info-container h3 {
+    margin: 0; /* ลบระยะห่างอัตโนมัติ */
+    font-size: 24px; /* ขนาดตัวอักษร */
+    color: #2c3e50; /* สีตัวอักษร */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* เงา */
+}
+
+.info-container p {
+    margin: 5px 0 0 0; /* ระยะห่างด้านบน */
+    font-size: 18px; /* ขนาดตัวอักษร */
+    color: #34495e; /* สีตัวอักษร */
+}
+
+.info-container:hover {
+    transform: translateY(-5px); /* ขยับขึ้นเมื่อเลื่อนเมาส์ */
+}
+
+#character img {
+    width: 100px;
+    height: auto;
+}
+
+#healthBar {
+    margin: 20px 0;
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    height: 20px;
+    position: relative; 
+}
+
+#health {
+    width: 0; 
+    height: 100%;
+    background-color: #76c7c0;
+    border-radius: 5px;
+    transition: width 2s; 
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.1s; /* เพิ่มการเคลื่อนไหวเมื่อเปลี่ยนสี */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* เงา */
+}
+
+button:hover {
+    background-color: #45a049; /* เปลี่ยนสีเมื่อเลื่อนเมาส์ */
+    transform: translateY(-2px); /* ขยับขึ้นเล็กน้อยเมื่อเลื่อนเมาส์ */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* เงาเมื่อเลื่อนเมาส์ */
+}
+
+button:active {
+    transform: translateY(1px); /* ลดลงเล็กน้อยเมื่อกด */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); /* เงาเมื่อกด */
+}
+
+
+#clock {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.8); /* พื้นหลังโปร่งใส */
+    border-radius: 10px; /* มุมโค้งมน */
+    padding: 10px 15px; /* เพิ่มระยะห่างภายใน */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* เงา */
+    transition: transform 0.2s; /* การเคลื่อนไหวเมื่อเลื่อนเมาส์ */
+}
+
+#clock:hover {
+    transform: scale(1.05); /* ขยายขนาดเมื่อเลื่อนเมาส์ */
+}
+
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8); /* ลดขนาดเบื้องต้น */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100; 
+    transition: transform 0.3s; /* เพิ่มการเคลื่อนไหว */
+}
+#popup.show {
+    transform: translate(-50%, -50%) scale(1); /* ขยายขนาดเมื่อแสดง */
+}
+.hidden {
+    display: none; /* ซ่อนป๊อปอัพ */
+}
+
+#playerInfo {
+    margin-top: 20px;
+}
+
+#questionsContainer {
+    margin-top: 20px;
+}
+
+#questionsForm div {
+    margin-bottom: 10px;
+}
+
+.question-item {
+    background-color: rgba(255, 255, 255, 0.9); /* พื้นหลังโปร่งใส */
+    border-radius: 10px; /* มุมโค้งมน */
+    padding: 15px; /* ระยะห่างภายใน */
+    margin: 10px 0; /* ระยะห่างระหว่างคำถาม */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* เงา */
+    transition: transform 0.2s, box-shadow 0.2s; /* เพิ่มการเคลื่อนไหว */
+}
+
+.question-item:hover {
+    transform: translateY(-5px); /* ขยับขึ้นเมื่อเลื่อนเมาส์ */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* เงาเมื่อเลื่อนเมาส์ */
+}
+
+.question-item label {
+    font-size: 18px; /* ขนาดตัวอักษร */
+    color: #2c3e50; /* สีตัวอักษร */
+    display: block; /* ทำให้ label ใช้เต็มความกว้าง */
+    margin-bottom: 5px; /* ระยะห่างด้านล่าง */
+}
+
+.question-item input {
+    width: 100%; /* ให้ input เต็มความกว้าง */
+    padding: 10px; /* ระยะห่างภายใน */
+    border: 1px solid #ccc; /* สีกรอบ */
+    border-radius: 5px; /* มุมโค้งมน */
+    transition: border-color 0.3s; /* เพิ่มการเคลื่อนไหวเมื่อเปลี่ยนสี */
+    box-sizing: border-box; /* ให้รวม padding และ border ในการคำนวณความกว้าง */
+}
+
+.question-item input:focus {
+    border-color: #76c7c0; /* เปลี่ยนสีกรอบเมื่อ focus */
+    outline: none; /* ลบกรอบรอบ */
+    box-shadow: 0 0 5px rgba(118, 199, 192, 0.5); /* เงาเมื่อ focus */
+}
+
+
