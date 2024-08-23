@@ -1,7 +1,12 @@
 [
   {
     "question": "",
-    "image": "/img/q2.png",
+    "image": "/img/qu1.png",
+    "answer": "4"
+  } ,
+  {
+    "question": "",
+    "image": "/img/qu2.png",
     "answer": "4"
   } 
 ]

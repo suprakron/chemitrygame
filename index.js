@@ -16,6 +16,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
+app.get('/levelnum', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'level_number.html'));
+});
+
+
 // Game Pages
 app.get('/game', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'game.html'));

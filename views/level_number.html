@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Levels</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            perspective: 1000px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .player-name,
+        .clock {
+            position: absolute;
+            top: 20px;
+            color: #ffffff;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transform: translateZ(10px);
+        }
+
+        .player-name {
+            left: 20px;
+        }
+
+        .clock {
+            right: 20px;
+        }
+
+        .levels-container {
+            text-align: center;
+            position: relative;
+            width: 80%;
+            max-width: 600px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .level {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e1e2f, #232340);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .level:hover {
+            transform: scale(1.1);
+        }
+
+        .level h2 {
+            margin: 0;
+        }
+
+        .level p {
+            font-size: 14px;
+            margin: 5px 0 0;
+        }
+
+        .level-1 {
+            top: 80%;
+            left: 15%;
+        }
+
+        .level-2 {
+            top: 70%;
+            left: 35%;
+        }
+
+        .level-3 {
+            top: 80%;
+            left: 55%;
+        }
+
+        .level-4 {
+            top: 65%;
+            left: 75%;
+        }
+
+        .level-5 {
+            top: 50%;
+            left: 60%;
+        }
+
+        .level-6 {
+            top: 50%;
+            left: 40%;
+        }
+
+        .level-7 {
+            top: 35%;
+            left: 20%;
+        }
+
+        .level-8 {
+            top: 20%;
+            left: 35%;
+        }
+
+        .level-9 {
+            top: 10%;
+            left: 55%;
+        }
+
+        .level-10 {
+            top: 5%;
+            left: 75%;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        path {
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 5;
+            fill: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="player-name" id="playerName">Player Name</div>
+    <div class="clock" id="clock">00:00</div>
+
+    <div id="scoreDisplay">คะแนนของคุณ: <span id="finalScore"></span></div>
+    <div class="levels-container">
+        <h1>Game Levels</h1>
+        <div class="level level-1" onclick="startLevel(1)">
+            <h2>1</h2>
+            <p>Level 1 Score: <span id="level1Score">0</span></p>
+        </div>
+        <div class="level level-2" onclick="startLevel(2)">
+            <h2>2</h2>
+            <p>Level 2 Score: <span id="level2Score">0</span></p>
+        </div>
+        <div class="level level-3" onclick="startLevel(3)">
+            <h2>3</h2>
+            <p>Level 3 Score: <span id="level3Score">0</span></p>
+        </div>
+        <div class="level level-4">
+            <h2>4</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-5">
+            <h2>5</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-6">
+            <h2>6</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-7">
+            <h2>7</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-8">
+            <h2>8</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-9">
+            <h2>9</h2>
+            <p>ระดับ</p>
+        </div>
+        <div class="level level-10">
+            <h2>10</h2>
+            <p>ระดับ</p>
+        </div>
+
+        <svg width="800" height="600">
+            <path d="M 120 480 Q 200 450 280 420" />
+            <path d="M 280 420 Q 360 450 440 480" />
+            <path d="M 440 480 Q 520 430 600 390" />
+            <path d="M 600 390 Q 580 360 480 300" />
+            <path d="M 480 300 Q 400 300 320 300" />
+            <path d="M 320 300 Q 240 250 160 210" />
+            <path d="M 160 210 Q 80 180 40 120" />
+        </svg>
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const finalScoreElement = document.getElementById('finalScore');
+            const storedScore = localStorage.getItem('playerScore') || 0;
+            finalScoreElement.innerText = storedScore;
+
+            // เพิ่มการตั้งค่าเวลาและนับถอยหลัง
+            let level = localStorage.getItem('currentLevel') || 1; // ดึงระดับจาก localStorage
+
+            // เปลี่ยนเส้นทางไปยังระดับถัดไป
+            const startLevel = (level) => {
+                localStorage.setItem('currentLevel', level); // บันทึกระดับปัจจุบัน
+
+        
+                if (level === 1) {
+                    window.location.href = '/game';  
+                } else {
+                    window.location.href = `/game_level${level}`; // เส้นทางสำหรับระดับ 2 และ 3
+                }
+            };
+
+
+            // เริ่มต้นเมื่อคลิก
+            document.querySelectorAll('.level').forEach((levelDiv, index) => {
+                levelDiv.addEventListener('click', () => {
+                    startLevel(index + 1); // เริ่มระดับที่เลือก
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

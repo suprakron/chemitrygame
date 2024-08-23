@@ -1,14 +1,12 @@
 [
     {
-        "question": "ดุลสมการของปฏิกิริยาเคมีที่กำหนดให้ต่อไปนี้ aN2 + bH2 cNH3",
-        "answer": "H2O"
-    },
-    {
-        "question": "ดุลสมการของปฏิกิริยาเคมีที่กำหนดให้ต่อไปนี้ aNaOH + bH2SO4 cNa2SO4 + dH2O",
-        "answer": "7"
-    },
-    {
-        "question": "ดุลสมการของปฏิกิริยาเคมีที่กำหนดให้ต่อไปนี้ aBe2C + bH2O cBe(OH)2 + dCH4",
-        "answer": "Carbon Dioxide"
-    }
+        "question": "",
+        "image": "/img/qut2_1.png",
+        "answer": "4"
+      } ,
+      {
+        "question": "",
+        "image": "/img/qut2_2.png",
+        "answer": "4"
+      } 
 ]

@@ -134,14 +134,13 @@
             <input type="text" id="name" name="name" required>
             <button type="submit">Start Game</button>
         </form>
-        <div id="playerInfo" class="info-container" style="display: none;"> <!-- Initially hidden -->
+        <div id="playerInfo" class="info-container" style="display: none;">  
             <h3 id="playerName">Player</h3>
             <p>Level 1 Score: <span id="level1Score">0</span></p>
             <p>Level 2 Score: <span id="level2Score">0</span></p>
             <p>Level 3 Score: <span id="level3Score">0</span></p>
         </div>
-
-
+ ุ
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -151,13 +150,13 @@
             const level3ScoreElement = document.getElementById('level3Score');
             const playerInfoElement = document.getElementById('playerInfo');
     
-            // Retrieve player's name from localStorage
+           
             const storedPlayerName = localStorage.getItem('playerName');
             if (storedPlayerName && playerNameElement) {
-                playerNameElement.innerText = storedPlayerName; // Display player's name
+                playerNameElement.innerText = storedPlayerName;  
             }
     
-            // Retrieve and display scores
+       
             displayScores();
     
             function displayScores() {
@@ -165,27 +164,27 @@
                 const level2Score = localStorage.getItem('scoreLevel2') || 0;
                 const level3Score = localStorage.getItem('scoreLevel3') || 0;
     
-                // Update score display
+           
                 level1ScoreElement.innerText = level1Score;
                 level2ScoreElement.innerText = level2Score;
                 level3ScoreElement.innerText = level3Score;
     
-                // Show the score display only after completing Level 3
+                 
                 if (level3Score > 0) { 
-                    playerInfoElement.style.display = 'block'; // Show scores only after Level 3 is completed
+                    playerInfoElement.style.display = 'block';  
                 }
             }
     
             const nameForm = document.getElementById('nameForm');
-            const playerNameInput = document.getElementById('name'); // Get the input element
+            const playerNameInput = document.getElementById('name');  
     
             if (nameForm && playerNameInput) {
                 nameForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const playerName = playerNameInput.value.trim();
                     if (playerName) {
-                        localStorage.setItem('playerName', playerName); // Save the player's name
-                        window.location.href = '/game'; // Redirect to Level 1
+                        localStorage.setItem('playerName', playerName);  
+                        window.location.href = '/levelnum';  
                     }
                 });
             }
