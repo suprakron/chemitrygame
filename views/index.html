@@ -10,7 +10,10 @@
         /* Add your previous styling here */
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('/img/bg_index.webp');
+            background-image: url('/img/bgindex.png');
+            /* เปลี่ยนเป็นภาพห้องเคมี */
+            background-size: cover;
+            background-position: center;
             margin: 0;
             padding: 0;
             display: flex;
@@ -25,13 +28,11 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(81, 79, 79, 0.8);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
-            transform: rotateY(-15deg);
-            transition: transform 0.3s ease-in-out;
             width: 90%;
             max-width: 400px;
         }
@@ -81,14 +82,20 @@
             width: 80%;
             font-size: 1.2em;
             cursor: pointer;
-            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 3px 10px rgba(0, 0, 0, 0.2);
             max-width: 300px;
         }
 
         button[type="submit"]:hover {
             background-color: #d35400;
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .scoreboard {
@@ -128,19 +135,19 @@
 
 <body>
     <div class="container">
-        <h1>Educational Card Game</h1>
+        <h1><img src="/img/icon.png"  > </h1>
         <form id="nameForm">
-            <label for="name">Enter your name:</label>
+            <label for="name">กรุณาใส่ชื่อตัวเอง:</label>
             <input type="text" id="name" name="name" required>
-            <button type="submit">Start Game</button>
+            <button type="submit">เริ่มเกมส์</button>
         </form>
-        <div id="playerInfo" class="info-container" style="display: none;">  
+        <div id="playerInfo" class="info-container" style="display: none;">
             <h3 id="playerName">Player</h3>
             <p>Level 1 Score: <span id="level1Score">0</span></p>
             <p>Level 2 Score: <span id="level2Score">0</span></p>
             <p>Level 3 Score: <span id="level3Score">0</span></p>
         </div>
- ุ
+        ุ
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -149,49 +156,49 @@
             const level2ScoreElement = document.getElementById('level2Score');
             const level3ScoreElement = document.getElementById('level3Score');
             const playerInfoElement = document.getElementById('playerInfo');
-    
-           
+
+
             const storedPlayerName = localStorage.getItem('playerName');
             if (storedPlayerName && playerNameElement) {
-                playerNameElement.innerText = storedPlayerName;  
+                playerNameElement.innerText = storedPlayerName;
             }
-    
-       
+
+
             displayScores();
-    
+
             function displayScores() {
                 const level1Score = localStorage.getItem('scoreLevel1') || 0;
                 const level2Score = localStorage.getItem('scoreLevel2') || 0;
                 const level3Score = localStorage.getItem('scoreLevel3') || 0;
-    
-           
+
+
                 level1ScoreElement.innerText = level1Score;
                 level2ScoreElement.innerText = level2Score;
                 level3ScoreElement.innerText = level3Score;
-    
-                 
-                if (level3Score > 0) { 
-                    playerInfoElement.style.display = 'block';  
+
+
+                if (level3Score > 0) {
+                    playerInfoElement.style.display = 'block';
                 }
             }
-    
+
             const nameForm = document.getElementById('nameForm');
-            const playerNameInput = document.getElementById('name');  
-    
+            const playerNameInput = document.getElementById('name');
+
             if (nameForm && playerNameInput) {
                 nameForm.addEventListener('submit', (e) => {
                     e.preventDefault();
                     const playerName = playerNameInput.value.trim();
                     if (playerName) {
-                        localStorage.setItem('playerName', playerName);  
-                        window.location.href = '/levelnum';  
+                        localStorage.setItem('playerName', playerName);
+                        window.location.href = '/levelnum';
                     }
                 });
             }
         });
     </script>
-    
-    
+
+
 
 
 </body>

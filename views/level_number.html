@@ -148,27 +148,84 @@
             stroke-width: 5;
             fill: none;
         }
+
+        .header {
+            position: absolute;
+            top: 20px;
+            /* ปรับตำแหน่งให้เหมาะสม */
+            left: 20px;
+            /* ปรับตำแหน่งให้เหมาะสม */
+            z-index: 1;
+            /* ทำให้แสดงด้านหน้า */
+        }
+
+        .info-display {
+            display: flex;
+            /* ใช้ flexbox เพื่อจัดเรียงลูกในแนวนอน */
+            flex-direction: column;
+            /* จัดเรียงในแนวตั้ง */
+            align-items: flex-start;
+            /* จัดแนวไปทางซ้าย */
+            background: rgba(0, 0, 0, 0.5);
+            /* พื้นหลังสีดำโปร่งใส */
+            padding: 15px 20px;
+            /* เพิ่ม padding รอบ ๆ กล่อง */
+            border-radius: 10px;
+            /* มุมมน */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+            /* เงา */
+            position: absolute;
+            /* ตั้งตำแหน่งที่แน่นอน */
+            top: 20px;
+            /* ระยะห่างจากด้านบน */
+            left: 20px;
+            /* ระยะห่างจากด้านซ้าย */
+        }
+
+        .player-name {
+            color: #ffffff;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            margin-bottom: 5px;
+            /* เพิ่มระยะห่างด้านล่าง */
+        }
+
+        .score-display {
+            color: #ffffff;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 
 <body>
-    <div class="player-name" id="playerName">Player Name</div>
+
+    <div class="info-display">
+        <!-- <div class="player-name" id="playerName">Player Name</div> -->
+        <div id="scoreDisplay" class="score-display">
+            คะแนนของคุณ: <span id="finalScore">0 <img src="/img/item.png" alt="" srcset=""></span>
+        </div>
+    </div>
+
+
+
+
     <div class="clock" id="clock">00:00</div>
 
-    <div id="scoreDisplay">คะแนนของคุณ: <span id="finalScore"></span></div>
+
     <div class="levels-container">
         <h1>Game Levels</h1>
         <div class="level level-1" onclick="startLevel(1)">
             <h2>1</h2>
-            <p>Level 1 Score: <span id="level1Score">0</span></p>
+            <p>ระดับ: <span id="level1Score">0</span></p>
         </div>
         <div class="level level-2" onclick="startLevel(2)">
             <h2>2</h2>
-            <p>Level 2 Score: <span id="level2Score">0</span></p>
+            <p>ระดับ <span id="level2Score">0</span></p>
         </div>
         <div class="level level-3" onclick="startLevel(3)">
             <h2>3</h2>
-            <p>Level 3 Score: <span id="level3Score">0</span></p>
+            <p>ระดับ <span id="level3Score">0</span></p>
         </div>
         <div class="level level-4">
             <h2>4</h2>
@@ -208,39 +265,37 @@
             <path d="M 320 300 Q 240 250 160 210" />
             <path d="M 160 210 Q 80 180 40 120" />
         </svg>
-
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const finalScoreElement = document.getElementById('finalScore');
-            const storedScore = localStorage.getItem('playerScore') || 0;
-            finalScoreElement.innerText = storedScore;
-
-            // เพิ่มการตั้งค่าเวลาและนับถอยหลัง
-            let level = localStorage.getItem('currentLevel') || 1; // ดึงระดับจาก localStorage
-
-            // เปลี่ยนเส้นทางไปยังระดับถัดไป
-            const startLevel = (level) => {
-                localStorage.setItem('currentLevel', level); // บันทึกระดับปัจจุบัน
-
-        
-                if (level === 1) {
-                    window.location.href = '/game';  
-                } else {
-                    window.location.href = `/game_level${level}`; // เส้นทางสำหรับระดับ 2 และ 3
-                }
-            };
+        // Function to start the level
+        function startLevel(level) {
+            alert("ด่านที่  " + level);
+            // Adjusting the redirect path based on the level
+            if (level === 1) {
+                window.location.href = '/game';
+            } else if (level === 2) {
+                window.location.href = '/game_level2';
+            } else if (level === 3) {
+                window.location.href = '/game_level3';
+            } else {
+                alert("Level " + level + " is not available.");
+            }
+        }
 
 
-            // เริ่มต้นเมื่อคลิก
-            document.querySelectorAll('.level').forEach((levelDiv, index) => {
-                levelDiv.addEventListener('click', () => {
-                    startLevel(index + 1); // เริ่มระดับที่เลือก
-                });
-            });
-        });
+
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').innerText = `${hours}:${minutes}`;
+        }
+
+
+        setInterval(updateClock, 60000);
+        updateClock();  
     </script>
-
 </body>
 
 </html>

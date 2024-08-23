@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let playerScore = 0;
     const currentLevel = determineCurrentLevel();
-    let questions = [];  
+    let questions = [];
 
     setupPlayerName();
     setupClock();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function determineCurrentLevel() {
         if (window.location.pathname.includes('game_level2')) return 2;
         if (window.location.pathname.includes('game_level3')) return 3;
-        return 1; // Default to level 1
+        return 1;  
     }
 
     function setupPlayerName() {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const playerName = document.getElementById('name').value;
                 localStorage.setItem('playerName', playerName);
                 playerNameElement.innerText = playerName;
-                window.location.href = 'game'; // Redirect to game.html
+                window.location.href = 'game'; 
             });
         } else {
             const storedPlayerName = localStorage.getItem('playerName');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (questionsContainer) {
             questionsContainer.style.display = 'block';
             const form = document.getElementById('questionsForm');
-            form.innerHTML = '';  
+            form.innerHTML = '';
 
             questions.forEach((q, index) => {
                 const questionElement = createQuestionElement(q, index);
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageElement = document.createElement('img');
             imageElement.src = questionData.image;
             imageElement.alt = `Question Image ${index + 1}`;
-            imageElement.style.maxWidth = '300px';
+            imageElement.style.maxWidth = '1000px';
             questionElement.appendChild(imageElement);
         }
 
@@ -118,101 +118,93 @@ document.addEventListener('DOMContentLoaded', () => {
         return inputContainer;
     }
 
-    function showPopup(message) {
-        const popup = document.getElementById('popup');
-        const popupMessage = document.getElementById('popupMessage');
-        const closePopup = document.getElementById('closePopup');
-        const popupInput = document.getElementById('popupInput');
-        const submitPopupInput = document.getElementById('submitPopupInput');
-    
-        popupMessage.innerText = message; // ตั้งค่าเนื้อหาของ popup
-        popup.style.display = 'block'; // แสดง popup
-        popupInput.value = ''; // ล้างค่าที่กรอกใน input field
-    
-        // ฟังก์ชันเมื่อกดปุ่มตกลง
-        submitPopupInput.onclick = function() {
-            const userInput = popupInput.value; // รับค่าที่กรอก
-            console.log(`ข้อความที่กรอก: ${userInput}`); // สามารถใช้ค่าที่กรอกนี้ตามที่คุณต้องการ
-            popup.style.display = 'none'; // ปิด popup
-        };
-    
-        // ปิด popup เมื่อกดปุ่มปิด
-        closePopup.onclick = function() {
-            popup.style.display = 'none';
-        }
-    
-        // ปิด popup เมื่อคลิกนอกพื้นที่ของ popup
-        window.onclick = function(event) {
-            if (event.target === popup) {
-                popup.style.display = 'none';
-            }
-        }
-    }
+    function showPopup(message, description) {
+        const popupMessage = document.createElement('div');
+        popupMessage.classList.add('popup-overlay');
 
-    
-function createHelperButton(questionElement, index) {
-    const helperButtonContainer = document.createElement('div');
-    helperButtonContainer.classList.add('helper-button-container'); // เพิ่ม class สำหรับการตกแต่ง
-
-    // สร้างปุ่มด้วยภาพ
-    const icons = ['icon1.png', 'icon2.png', 'icon3.png'];
-    icons.forEach((icon, idx) => {
-        const iconButton = document.createElement('button');
-        iconButton.classList.add('helper-button');
-        iconButton.innerHTML = `<img src="/img/${icon}" alt="Help Icon ${idx + 1}" style="width: 50px; height: 50px;">`; // ใช้เส้นทางที่ถูกต้อง
-
-        // เพิ่ม event listener สำหรับการคลิกที่ปุ่ม
-        iconButton.addEventListener('click', () => {
-            const popupMessage = document.createElement('div');
-            popupMessage.classList.add('popup-message');
-            
-            const messages = [
-                "นี่คือข้อความสำหรับ icon1", // ข้อความสำหรับ icon1
-                "นี่คือข้อความสำหรับ icon2", // ข้อความสำหรับ icon2
-                "นี่คือข้อความสำหรับ icon3"  // ข้อความสำหรับ icon3
-            ];
-
-            // สร้างเนื้อหาใน popup
-            const popupContent = `
-                <div class="popup-content">
-                    <p>${messages[idx]}</p>
-                    <input type="text" placeholder="ใส่ข้อความที่นี่">
-                    <button class="close-popup">ปิด</button>
+        const popupContent = `
+            <div class="popup-content">
+                <div class="popup-header">
+                    <div class="popup-title">Limiting reagent</div>
+                    <button class="close-popup">×</button>
                 </div>
-            `;
-            popupMessage.innerHTML = popupContent;
-            
-            // เพิ่ม event listener สำหรับปุ่มปิด popup
-            const closePopupButton = popupMessage.querySelector('.close-popup');
-            closePopupButton.addEventListener('click', () => {
-                document.body.removeChild(popupMessage);
-            });
+                <div class="popup-body">
+                    <p>${message}</p>
+                    <input type="text" id="popupInput" class="popup-input" placeholder="ใส่ข้อความที่นี่">
+                    <p style="color: red;">${description}</p> <!-- แสดงคำอธิบายในสีแดง -->
+                </div>
+                <div class="popup-footer">
+                    <button id="submitPopupInput">ตกลง</button>
+                </div>
+            </div>
+        `;
 
-            // แสดง popup
-            document.body.appendChild(popupMessage);
+        popupMessage.innerHTML = popupContent;
+        document.body.appendChild(popupMessage);
+
+        // Event Listener สำหรับปิด popup
+        const closePopupButton = popupMessage.querySelector('.close-popup');
+        closePopupButton.addEventListener('click', () => {
+            document.body.removeChild(popupMessage);
         });
 
-        helperButtonContainer.appendChild(iconButton); // เพิ่มปุ่มไปยัง container
-    });
+        // Event Listener สำหรับปุ่มตกลง
+        const submitPopupInput = popupMessage.querySelector('#submitPopupInput');
+        submitPopupInput.addEventListener('click', () => {
+            const userInput = popupMessage.querySelector('#popupInput').value;
+            console.log(`ข้อความที่กรอก: ${userInput}`);
+            document.body.removeChild(popupMessage);
+        });
 
-    questionElement.appendChild(helperButtonContainer); // เพิ่ม container ลงใน questionElement
-    return helperButtonContainer; // คืนค่าตัวแปร
-}
+        // ปิด popup เมื่อคลิกนอกพื้นที่ของ popup
+        window.addEventListener('click', (event) => {
+            if (event.target === popupMessage) {
+                document.body.removeChild(popupMessage);
+            }
+        });
+    }
 
-    
-    // function createHelperButton(questionElement, index) {
-    //     const helperButton = document.createElement('button');
-    //     helperButton.innerText = 'ตัวช่วย';
-    //     helperButton.classList.add('helper-button');
 
-    //     helperButton.addEventListener('click', () => {
-    //         const dropdown = createHelperDropdown(questionElement, index);
-    //         questionElement.appendChild(dropdown);
-    //     });
+    function createHelperButton(questionElement, index) {
+        const helperButtonContainer = document.createElement('div');
+        helperButtonContainer.classList.add('helper-button-container');
 
-    //     return helperButton;
-    // }
 
+        const icons = ['icon1.png', 'icon2.png', 'icon3.png'];
+        const messages = [
+            "เลือกเลขสัมประสิทธิ์หน้าสาร ที่ต้องการรู้",
+            "สารกำหนดปริมาณ คือ",
+            "แฟกเตอร์สำหรับการเปลี่ยนหน่วย คือ"
+        ];
+        const textundescription = [
+            "เงื่อนไข : แก๊สออกซิเจน (O ) ของคุณจะลดลง 1 mol ",
+            "เงื่อนไข : แก๊สออกซิเจน (O ) ของคุณจะลดลง 2 mol",
+            "เงื่อนไข : แก๊สไฮโดรเจน (H ) ของคุณจะลดลง 1 mol"
+        ];
+
+        icons.forEach((icon, idx) => {
+            const iconButton = document.createElement('button');
+            iconButton.classList.add('helper-button');
+            iconButton.innerHTML = `
+            <div class="icon-container">
+                <img src="/img/${icon}" alt="Help Icon ${idx + 1}" class="icon-image">
+            </div>
+        `;
+
+
+            // เพิ่ม event listener สำหรับการคลิกที่ปุ่ม
+            iconButton.addEventListener('click', () => {
+                showPopup(messages[idx], textundescription[idx]);
+            });
+
+            helperButtonContainer.appendChild(iconButton);
+        });
+
+        questionElement.appendChild(helperButtonContainer);
+        return helperButtonContainer;
+    }
+
+ 
     function createHelperDropdown(questionElement, index, selectedIcon) {
         const dropdown = document.createElement('div');
         dropdown.classList.add('dropdown');
@@ -223,21 +215,21 @@ function createHelperButton(questionElement, index) {
             <button class="helper-option" data-value="3">C</button>
             <button class="close-dropdown">ปิด</button>
         `;
-    
+
         dropdown.querySelectorAll('.helper-option').forEach(option => {
             option.addEventListener('click', (e) => {
                 const value = e.target.dataset.value;
                 const inputField = document.getElementById(`answer${e.target.textContent.toLowerCase()}${index}`);
                 inputField.value = value;
                 inputField.disabled = true;
-                dropdown.remove(); 
+                dropdown.remove();
             });
         });
-    
+
         dropdown.querySelector('.close-dropdown').addEventListener('click', () => {
             dropdown.remove();
         });
-    
+
         return dropdown;
     }
 
@@ -260,10 +252,10 @@ function createHelperButton(questionElement, index) {
                 const answerA = formData.get(`answer${i}_a`);
                 const answerB = formData.get(`answer${i}_b`);
                 const answerC = formData.get(`answer${i}_c`);
-                answers.push({ a: answerA, b: answerB, c: answerC });  
+                answers.push({ a: answerA, b: answerB, c: answerC });
             }
 
-            await submitAnswers(answers);  
+            await submitAnswers(answers);
         });
 
         return submitButton;
@@ -276,13 +268,13 @@ function createHelperButton(questionElement, index) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ answers, level: currentLevel }),
             });
-    
+
             if (response.ok) {
                 const result = await response.json();
                 playerScore += result.points; // เพิ่มคะแนนที่ได้
                 localStorage.setItem('playerScore', playerScore); // เก็บคะแนนใน localStorage
                 playerScoreElement.innerText = `คะแนน: ${playerScore}`; // แสดงคะแนนที่ได้
-    
+
                 // รอ 2 วินาทีเพื่อให้ผู้ใช้เห็นคะแนนก่อนเปลี่ยนหน้า
                 setTimeout(() => {
                     window.location.href = '/levelnum'; // เปลี่ยนหน้าไปยัง level_number.html
@@ -294,10 +286,12 @@ function createHelperButton(questionElement, index) {
             console.error('Error submitting answers:', error);
         }
     }
-    
 
-    function updateScoreDisplay() {
-        playerScoreElement.innerText = `Score: ${playerScore}`;
-        healthBar.style.width = `${Math.max(0, 100 - playerScore)}%`;  
+
+    function updateScore(newScore) {
+        let currentScore = parseInt(localStorage.getItem('playerScore')) || 0;
+        currentScore += newScore; // เพิ่มคะแนนใหม่เข้าไป
+        localStorage.setItem('playerScore', currentScore); // บันทึกคะแนนใหม่
+        document.getElementById('finalScore').innerText = currentScore; // อัปเดตคะแนนที่แสดง
     }
 });
